@@ -1,6 +1,8 @@
 package com.example.jsonproject;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -23,24 +25,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Gson gson = new Gson();
 
-        String jsonString = null;
-        try {
-            InputStream inputStream = getAssets().open("questions.json");
-            int size = inputStream.available();
-            byte[] buffer = new byte[size];
-            inputStream.read(buffer);
-            inputStream.close();
-            jsonString = new String(buffer, "UTF-8");
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-        } catch (IOException e){
-            e.printStackTrace();
-            Log.i(TAG, "onCreate: " + e);
-        }
+        //fragment
+        FirstFragment firstFragment=new FirstFragment();
+        transaction.add(R.id.pageContainer, firstFragment);
 
-        quiz myquiz = gson.fromJson(jsonString,quiz.class);
-
-        Log.e(TAG, "onCreate: "+myquiz.mQuestions.get(0).mQuestion);
+        transaction.commit();
     }
 }
