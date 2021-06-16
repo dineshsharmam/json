@@ -32,6 +32,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.ContentValues.TAG;
 
@@ -60,12 +62,19 @@ public class FirstFragment extends Fragment {
     }
 
     private void initJson() {
-        Call<quiz> call = RetrofitClient.getInstance().getMyApi().getquiz();
+
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Api.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        Api myApi = retrofit.create(Api.class);
+        Call <quiz> call =myApi.getquiz();
         call.enqueue(new Callback<quiz>() {
             @Override
             public void onResponse(Call<quiz> call, Response<quiz> response) {
+                if(response.isSuccessful()){
                 quiz myquiz = response.body();
-                setRecyclerView(myquiz);
+                setRecyclerView(myquiz);}
+                else{
+                    Log.d("success","Response-->"+new Gson().toJson(response));
+                }
 
             }
 
