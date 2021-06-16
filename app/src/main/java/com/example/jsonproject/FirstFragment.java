@@ -1,5 +1,6 @@
 package com.example.jsonproject;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -48,10 +49,33 @@ public class FirstFragment extends Fragment {
        // recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
 
-        adapter = new ViewAdapter(getActivity().getApplicationContext());
+        adapter = new ViewAdapter(getActivity().getApplicationContext(),initJson());
         recyclerView.setAdapter(adapter);
 
     }
 
+    private quiz initJson() {
+        Gson gson = new Gson();
+        quiz myquiz;
+
+        String jsonString = null;
+        try {
+            InputStream inputStream = getContext().getAssets().open("questions.json");
+            int size = inputStream.available();
+            byte[] buffer = new byte[size];
+            inputStream.read(buffer);
+            inputStream.close();
+            jsonString = new String(buffer, "UTF-8");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.i(TAG, "onCreate: " + e);
+        }
+
+        myquiz = gson.fromJson(jsonString, quiz.class);
+
+        return myquiz;
+
+    }
 
 }

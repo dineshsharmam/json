@@ -26,9 +26,9 @@ public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.ItemViewHolder
     quiz myquiz;
 
 
-    public ViewAdapter(Context context) {
+    public ViewAdapter(Context context,quiz quiz) {
         appContext = context;
-        initJson(appContext);
+        myquiz = quiz;
     }
 
     @NonNull
@@ -55,26 +55,7 @@ public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.ItemViewHolder
         return myquiz.mQuestions.size();
     }
 
-    private void initJson(Context context) {
-        Gson gson = new Gson();
 
-        String jsonString = null;
-        try {
-            InputStream inputStream = context.getAssets().open("questions.json");
-            int size = inputStream.available();
-            byte[] buffer = new byte[size];
-            inputStream.read(buffer);
-            inputStream.close();
-            jsonString = new String(buffer, "UTF-8");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.i(TAG, "onCreate: " + e);
-        }
-
-        myquiz = gson.fromJson(jsonString, quiz.class);
-
-    }
 
     class ItemViewHolder extends RecyclerView.ViewHolder {
 
